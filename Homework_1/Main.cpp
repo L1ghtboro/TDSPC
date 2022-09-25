@@ -3,13 +3,16 @@
 #include "Thread.h"
 
 void test_print(int someparam) {
-	std::cout << "Nothing Special" << std::endl;
+	std::cout << "Nothing Special "<< someparam << std::endl;
+}
+
+int test_print1(int someparam) {
+	std::cout << "Nothing Special! " << someparam << std::endl;
+	return 0;
 }
 
 int main() {
 	Thread thread_obj;
-	thread_obj.Thread_Create(test_print, 1);
-	thread_obj.Thread_Create(test_print, 2);
 
 	thread_obj.Thread_Sync();
 	return 0;

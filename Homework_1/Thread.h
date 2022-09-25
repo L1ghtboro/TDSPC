@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 class Thread {
 	private:
 		std::vector<std::thread> Threads;
@@ -15,7 +17,6 @@ class Thread {
 		const int max_products = 1;
 
 		std::atomic<int> num_producers_working;
-		std::stack<int> products; //stack our products
 		std::mutex xmutex;
 		std::mutex mut_rand;
 

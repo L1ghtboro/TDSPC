@@ -1,6 +1,8 @@
 #include "Dependencies.h"
 #include "Thread.h"
 
+std::stack<int> products; //stack our products
+
 Thread::Thread() {
 	num_producers_working = 0; // stop programm when no producers left
 }
@@ -30,7 +32,7 @@ bool Thread::Produce(int producer_id) { // will produce new product for produce_
         std::unique_lock<std::mutex> lock(xmutex);
         int product;
 
-        is_not_full.wait(lock, []{ return products.size() != max_products; });
+        is_not_full.wait(lock, []{ return products.size() != 1; });
         product = GenerateNumber();
         products.push(product);
 
@@ -62,11 +64,13 @@ void Thread::Producer(int id) {
 }
 
 void Thread::Thread_Sync() {
+    Thread* temp = new Thread();
+
     for (int i = 0; i < num_producers; ++i)
-        Threads.push_back(std::thread(Producer, i));
+        Threads.push_back(std::thread(&Thread::Producer, temp, i));
 
     for (int i = 0; i < num_consumers; ++i)
-        Threads.push_back(std::thread(Consumer, i));
+        Threads.push_back(std::thread(&Thread::Consumer, temp, i));
 
     for (auto& threads : Threads)
         threads.join();
